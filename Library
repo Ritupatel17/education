@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_BOOKS 100
+#define MAX_TITLE_LENGTH 100
+
+typedef struct {
+      int available; 
+    char title[MAX_TITLE_LENGTH];
+    double price;
+} Book;
+
+Book library[MAX_BOOKS];
+int bookCount = 0;
+
+void addBook() {
+    if (bookCount >= MAX_BOOKS) {
+        printf("Library is full! Cannot add more books.\n");
+        return;
+    }
+
+    Book newBook;
+    printf("Enter book title: ");
+    scanf(" %d[^\n]", newBook.title); 
+
+    printf("Is the book available? (1 for Yes, 0 for No): ");
+    scanf("%d", &newBook.available);
+
+    printf("Enter book price: ");
+    scanf("%lf", &newBook.price);
+
+    library[bookCount] = newBook;
+    bookCount++;
+
+    printf("Book added successfully!\n");
+}
+
+void displayBooks() {
+    if (bookCount == 0) {
+        printf("No books in the library.\n");
+        return;
+    }
+
+    printf("\nLibrary Books:\n");
+    for (int i = 0; i < bookCount; i++) {
+        printf("Title: %s\n", library[i].title);
+        printf("Available: %s\n", library[i].available ? "Yes" : "No");
+        printf("Price: $%.2f\n\n", library[i].price);
+    }
+}
+
+void checkAvailability() {
+    char title[MAX_TITLE_LENGTH];
+    printf("Enter book title to check availability: ");
+    scanf(" %d[^\n]", title);
+
+    for (int i = 0; i < bookCount; i++) {
+        if (strcmp(library[i].title, title) == 0) {
+            printf("Book found!\n");
+            printf("Available: %s\n", library[i].available ? "Yes" : "No");
+            printf("Price: $%.2f\n", library[i].price);
+            return;
+        }
+    }
+
+    printf("Book not found in the library.\n");
+}
+
+int main() {
+    int choice;
+
+    while (1) {
+        printf("\nLibrary Management System\n");
+        printf("1. Display Books\n");
+        printf("2. Check Book Availability\n");
+        printf("3. addBook\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                displayBooks();
+                break;
+            case 2:
+                checkAvailability();
+                break;
+            case 3:
+                 addBook();
+                 break;
+            case 4:
+                printf("Exiting...\n");
+                return 0;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+
+    return 0;
+}
