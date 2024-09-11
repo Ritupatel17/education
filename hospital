@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_BEDS 100
+
+typedef struct {
+    
+    int available;  // 1 for available, 0 for occupied
+    int bedNumber;
+} Bed;
+
+Bed hospital[MAX_BEDS];
+int bedCount = 5;
+
+void displayBeds() {
+    if (bedCount == 5) {
+        printf(" beds  availabel.\n");
+    }
+    
+
+    printf("\nHospital Beds Status:\n");
+    for (int i = 0; i < bedCount; i++) {
+        printf("Bed Number: %d\n", hospital[i].bedNumber);
+        printf("Available: %s\n\n", hospital[i].available ? "Yes" : "No");
+    }
+}
+void checkBedAvailability() {
+    int bedNumber;
+    printf("Enter bed number to check availability: ");
+    scanf("%d", &bedNumber);
+
+    for (int i = 0; i < bedCount; i++) {
+        if (hospital[i].bedNumber == bedNumber) {
+            printf("Bed Number: %d\n", hospital[i].bedNumber);
+            printf("Available: %s\n", hospital[i].available ? "Yes" : "No");
+            return;
+        }
+    }
+
+    printf("Bed not found in the hospital.\n");
+}
+
+void addBed() {
+    if (bedCount >= MAX_BEDS) {
+        printf("Hospital is full! Cannot add more beds.\n");
+        return;
+    }
+
+    Bed newBed;
+    printf("Enter bed number: ");
+    scanf("%d", &newBed.bedNumber);
+
+    printf("Is the bed available? (1 for Yes, 0 for No): ");
+    scanf("%d", &newBed.available);
+
+    hospital[bedCount] = newBed;
+    bedCount++;
+
+    printf("Bed added successfully!\n");
+}
+
+int main() {
+    int choice;
+
+    while (1) {
+        printf("\nHospital Bed Management System\n");
+         printf("1. Check Bed Availability\n");
+         printf("2. Display Beds\n");
+        printf("3. Add Bed\n");
+       
+        
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                displayBeds();
+                break;
+            case 2:
+                checkBedAvailability();
+                break;
+           case 3:
+                addBed();
+                break;
+            case 4:
+                printf("Exiting...\n");
+                return 0;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+
+    return 0;
+}
