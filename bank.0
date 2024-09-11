@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_ACCOUNTS 100
+#define ACCOUNT_NUMBER_LENGTH 10
+#define PIN_LENGTH 4
+#define MAX_NAME_LENGTH 100
+
+typedef struct {
+    char accountNumber[ACCOUNT_NUMBER_LENGTH];
+    char pin[PIN_LENGTH];
+    char name[MAX_NAME_LENGTH];
+    double balance;
+} Account;
+
+Account accounts[MAX_ACCOUNTS];
+int accountCount = 0;
+
+void createAccount() {
+    if (accountCount >= MAX_ACCOUNTS) {
+        printf("Account limit reached!\n");
+        return;
+    }
+
+    Account newAccount;
+    printf("Enter account number: ");
+    scanf("%s", newAccount.accountNumber);
+
+    printf("Enter PIN (4 digits): ");
+    scanf("%s", newAccount.pin);
+
+    printf("Enter your name: ");
+    scanf(" %[^\n]", newAccount.name); 
+
+    newAccount.balance = 0.0;
+
+    accounts[accountCount] = newAccount;
+    accountCount++;
+
+    printf("Account created successfully!\n");
+}
+
+Account* login() {
+    char accountNumber[ACCOUNT_NUMBER_LENGTH];
+    char pin[PIN_LENGTH];
+
+    printf("Enter account number: ");
+    scanf("%s", accountNumber);
+
+    printf("Enter PIN: ");
+    scanf("%s", pin);
+
+    for (int i = 0; i < accountCount; i++) {
+        if (strcmp(accounts[i].accountNumber, accountNumber) == 0 &&
+            strcmp(accounts[i].pin, pin) == 0) {
+            printf("Login successful!\n");
+            return &accounts[i];
+        }
+    }
+
+    printf("Invalid account number or PIN.\n");
+    return NULL;
+}
+
+void withdrawMoney(Account* account) {
+    if (account == NULL) {
+        printf("No account logged in.\n");
+        return;
+    }
+
+    double amount;
+    printf("Enter amount to withdraw: ");
+    scanf("%lf", &amount);
+
+    if (amount > account->balance) {
+        printf("Insufficient balance.\n");
+        return;
+    }
+
+    account->balance -= amount;
+    printf("Withdrawal successful! New balance: %.2f\n", account->balance);
+}
+
+int main() {
+    int choice;
+    Account* loggedInAccount = NULL;
+
+    while (1) {
+        printf("\nBank Management System\n");
+        printf("1. Create Account\n");
+        printf("2. Login\n");
+        printf("3. Withdraw Money\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                createAccount();
+                break;
+            case 2:
+                loggedInAccount = login();
+                break;
+            case 3:
+                withdrawMoney(loggedInAccount);
+                break;
+            case 4:
+                printf("Exiting...\n");
+                return 0;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+
+    return 0;
+}
